@@ -16,16 +16,10 @@ function App() {
     { id: v1(), title: "ReactJS", isDone: false }
   ])
 
-  const removeTask = (taskId: string) => {
-    setTasks(tasks.filter(t => t.id !== taskId))
-  }
-  const changeFilter = (filter: FilterValueType) => {
-    setFilter(filter)
-  }
-
-  const addTask = (title: string) => {
-    setTasks([...tasks, { id: v1(), title, isDone: false }])
-  }
+  const removeTask = (id: string) => setTasks(tasks.filter(t => t.id !== id))
+  const changeFilter = (filter: FilterValueType) => setFilter(filter)
+  const addTask = (title: string) => setTasks([...tasks, { id: v1(), title, isDone: false }])
+  const changeTaskStatus = (id: string, isDone: boolean) => setTasks(tasks.map(t => t.id === id ? {...t, isDone} : t))
 
   let taskForTodolist = []
   switch (filter) {
@@ -41,7 +35,8 @@ function App() {
         tasks={taskForTodolist}
         removeTask={removeTask}
         changeFilter={changeFilter}
-        addTask={addTask} />
+        addTask={addTask} 
+        changeTaskStatus={changeTaskStatus}/>
     </div>
   );
 }
