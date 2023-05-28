@@ -7,7 +7,7 @@ import { v1 } from 'uuid';
 export type FilterValueType = 'all' | 'active' | 'completed'
 
 function App() {
-  
+
   let [filter, setFilter] = useState<FilterValueType>('all')
 
   let [tasks, setTasks] = useState([
@@ -23,20 +23,25 @@ function App() {
     setFilter(filter)
   }
 
+  const addTask = (title: string) => {
+    setTasks([...tasks, { id: v1(), title, isDone: false }])
+  }
+
   let taskForTodolist = []
-  switch(filter) {
+  switch (filter) {
     case "active": taskForTodolist = tasks.filter(t => t.isDone === false); break
     case "completed": taskForTodolist = tasks.filter(t => t.isDone === true); break
     default: taskForTodolist = tasks
   }
-  
+
   return (
     <div className="App">
       <Todolist
         title="What to learn"
-        task={taskForTodolist}
+        tasks={taskForTodolist}
         removeTask={removeTask}
-        changeFilter={changeFilter} />
+        changeFilter={changeFilter}
+        addTask={addTask} />
     </div>
   );
 }
