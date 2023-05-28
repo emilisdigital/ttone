@@ -1,12 +1,9 @@
 import React from "react"
 import { useState } from "react"
-import { FilterValueType } from "../App"
-
-type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
+import { Button, ButtonGroup, Checkbox, Icon, IconButton, TextField } from "@mui/material"
+import { Delete } from "@mui/icons-material"
+import DeleteIcon from '@mui/icons-material/Delete';
+import { FilterValueType, TaskType } from "../App";
 
 type TodolistPropsType = {
     title: string
@@ -15,17 +12,21 @@ type TodolistPropsType = {
     changeFilter: (filter: FilterValueType) => void
     addTask: (title: string) => void
     changeTaskStatus: (id: string, isDone: boolean) => void
-}
+  }
+
 export const Todolist = ({ title, tasks, removeTask, changeFilter, addTask, changeTaskStatus }: TodolistPropsType) => {
+
     let [inputValue, setInputValue] = useState('')
     let [error, setError] = useState<string | null>(null)
-    console.log(error)
-    const inputValueOnChange = (e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.currentTarget.value)
+
+    const removeTodolist = () => { }
+
+    const inputValueOnChange = (e: React.ChangeEvent<HTMLInputElement>) => { setInputValue(e.currentTarget.value); setError(null) }
     const onKeyPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
             if (inputValue.trim() !== '') { addTask(inputValue.trim()); setInputValue('') }
-            else {setError('Title is required')}
-        } 
+            else { setError('Title is required') }
+        }
     }
     const addTaskOnClick = () => {
         if (inputValue.trim() !== '') {
@@ -37,10 +38,17 @@ export const Todolist = ({ title, tasks, removeTask, changeFilter, addTask, chan
     const changeFilterCompleted = () => changeFilter('completed')
     return (
         <div>
-            <h3>{title}</h3>
+            <h3>{title}
+                <IconButton onClick={removeTodolist}>
+                    <Delete />
+                </IconButton>
+            </h3>
             <div>
-                <input value={inputValue} onChange={inputValueOnChange} onKeyPress={onKeyPressEnter} className={error ? 'error' : ''} />
-                <button onClick={addTaskOnClick}>+</button>
+                <TextField label="Size" id="outlined-size-small" defaultValue="Small" size="small"
+                    error={!!error} value={inputValue} onChange={inputValueOnChange}
+                    onKeyPress={onKeyPressEnter} className={error ? 'error' : ''}
+                />
+                <Icon baseClassName="fas" className="fa-plus-circle" color="primary" onClick={addTaskOnClick}>+</Icon>
                 {error && <div className="error-message">{error}</div>}
             </div>
             <ul>
@@ -50,15 +58,23 @@ export const Todolist = ({ title, tasks, removeTask, changeFilter, addTask, chan
                         let newChecked = e.currentTarget.checked
                         changeTaskStatus(t.id, newChecked)
                     }
+                    const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
                     return <li key={t.id}>
-                        <input type='checkbox' checked={t.isDone} onChange={changeTaskStatusOnClick} />
-                        <span>{t.title}</span><button onClick={removeTaskOnClick}>X</button></li>
+                        <Checkbox size="small" {...label} checked={t.isDone} onChange={changeTaskStatusOnClick} />
+                        <span>{t.title}</span>
+                        <IconButton aria-label="delete" size="small">
+                            <DeleteIcon onClick={removeTaskOnClick} fontSize="small" />
+                        </IconButton>
+                    </li>
                 })}
             </ul>
             <div>
-                <button onClick={changeFilterAll}>All</button>
-                <button onClick={changeFilterActive}>Active</button>
-                <button onClick={changeFilterCompleted}>Completed</button>
+                {/* <button onClick={changeFilterAll}>All</button> */}
+                <ButtonGroup variant="outlined" aria-label="outlined button group">
+                    <Button onClick={changeFilterAll} >All</Button>
+                    <Button onClick={changeFilterActive}>Active</Button>
+                    <Button onClick={changeFilterCompleted}>Completed</Button>
+                </ButtonGroup>
             </div>
         </div>
     )
