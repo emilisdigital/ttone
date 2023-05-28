@@ -1,24 +1,25 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Todolist } from './Component/Todolist';
+import { v1 } from 'uuid';
 
 function App() {
+  const tasks1 = [
+    { id: v1(), title: "HTML&CSS", isDone: true },
+    { id: v1(), title: "JS", isDone: true },
+    { id: v1(), title: "ReactJS", isDone: false }
+  ]
+  const tasks2 = [
+    { id: v1(), title: "Hello world", isDone: true },
+    { id: v1(), title: "I am Happy", isDone: false },
+    { id: v1(), title: "Yo", isDone: false }
+  ]
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Todolist title="What to learn" task={tasks1}/>
+      <Todolist title="Start" task={tasks2}/>
     </div>
   );
 }
